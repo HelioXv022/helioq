@@ -4,15 +4,15 @@ import importlib
 
 import pytest
 
-import minq
+import helioq
 
 
 def test_version():
-    assert minq.__version__ == "0.0.1"
+    assert helioq.__version__ == "0.0.1"
 
 
 @pytest.mark.parametrize(
-    "module", ["minq.circuit", "minq.simulator", "minq.passes", "minq.qasm"]
+    "module", ["helioq.circuit", "helioq.simulator", "helioq.passes", "helioq.qasm"]
 )
 def test_layer_modules_import(module):
     importlib.import_module(module)
