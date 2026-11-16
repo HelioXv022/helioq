@@ -41,6 +41,24 @@ GATE_SPECS: dict[str, tuple[int, int]] = {
     "swap": (2, 0),
 }
 
+# Operations that are NOT unitary gates (design.md D7). They share the same
+# ``Gate`` container, but only some backends understand them: the stabilizer
+# simulator runs all of them, the state-vector simulator runs none (yet).
+# name -> (number of qubits, number of parameters)
+NON_UNITARY_SPECS: dict[str, tuple[int, int]] = {
+    "measure": (1, 0),  # Z-basis measurement; appends one bit to the record
+    "reset": (1, 0),  # put the qubit back in |0>
+    # Pauli noise channels; the single parameter is a probability
+    "x_error": (1, 1),  # apply X with probability p
+    "z_error": (1, 1),  # apply Z with probability p
+    "depolarize1": (1, 1),  # apply X, Y or Z, each with probability p/3
+}
+
+# Everything a circuit may contain.
+OP_SPECS: dict[str, tuple[int, int]] = {**GATE_SPECS, **NON_UNITARY_SPECS}
+
+NOISE_OPS = frozenset({"x_error", "z_error", "depolarize1"})
+
 
 @dataclass(frozen=True)
 class Gate:
@@ -55,9 +73,9 @@ class Gate:
     params: tuple[float, ...] = ()
 
     def __post_init__(self) -> None:
-        if self.name not in GATE_SPECS:
+        if self.name not in OP_SPECS:
             raise ValueError(f"unknown gate {self.name!r}")
-        n_qubits, n_params = GATE_SPECS[self.name]
+        n_qubits, n_params = OP_SPECS[self.name]
         if len(self.qubits) != n_qubits:
             raise ValueError(
                 f"{self.name} acts on {n_qubits} qubit(s), got {len(self.qubits)}"
@@ -68,6 +86,12 @@ class Gate:
             )
         if len(set(self.qubits)) != len(self.qubits):
             raise ValueError(f"{self.name} uses the same qubit twice: {self.qubits}")
+        if self.name in NOISE_OPS and not 0.0 <= self.params[0] <= 1.0:
+            raise ValueError(f"{self.name} needs a probability, got {self.params[0]}")
+
+    @property
+    def is_unitary(self) -> bool:
+        return self.name in GATE_SPECS
 
     def __str__(self) -> str:
         args = f"({', '.join(f'{p:g}' for p in self.params)})" if self.params else ""
@@ -113,6 +137,11 @@ class Circuit:
         if not isinstance(other, Circuit):
             return NotImplemented
         return self.n_qubits == other.n_qubits and self._gates == other._gates
+
+    @property
+    def n_measurements(self) -> int:
+        """How many bits one run of this circuit writes to the record."""
+        return sum(g.name == "measure" for g in self._gates)
 
     def __str__(self) -> str:
         lines = [f"Circuit({self.n_qubits} qubits, {len(self)} gates)"]
@@ -173,3 +202,52 @@ class Circuit:
 
     def swap(self, a: int, b: int) -> Circuit:
         return self._add("swap", a, b)
+
+    # --- non-unitary operations (design.md D7) ----------------------------
+
+    def measure(self, *qubits: int) -> Circuit:
+        """Measure each qubit in the Z basis, in the order given."""
+        for q in qubits:
+            self._add("measure", q)
+        return self
+
+    def measure_all(self) -> Circuit:
+        return self.measure(*range(self.n_qubits))
+
+    def reset(self, *qubits: int) -> Circuit:
+        for q in qubits:
+            self._add("reset", q)
+        return self
+
+    def x_error(self, p: float, *qubits: int) -> Circuit:
+        for q in qubits:
+            self._add("x_error", q, params=(p,))
+        return self
+
+    def z_error(self, p: float, *qubits: int) -> Circuit:
+        for q in qubits:
+            self._add("z_error", q, params=(p,))
+        return self
+
+    def depolarize1(self, p: float, *qubits: int) -> Circuit:
+        for q in qubits:
+            self._add("depolarize1", q, params=(p,))
+        return self
+
+    # --- drawing (see helioq.draw) ----------------------------------------
+
+    def draw(self) -> str:
+        """The circuit as a text diagram. ``print(circ.draw())``."""
+        from helioq.draw import draw_text
+
+        return draw_text(self)
+
+    def to_svg(self) -> str:
+        """The circuit as an SVG picture (a string you can save to a file)."""
+        from helioq.draw import draw_svg
+
+        return draw_svg(self)
+
+    def _repr_svg_(self) -> str:
+        # Jupyter calls this, so a circuit shows up as a picture in notebooks.
+        return self.to_svg()

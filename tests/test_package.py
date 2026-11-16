@@ -12,7 +12,16 @@ def test_version():
 
 
 @pytest.mark.parametrize(
-    "module", ["helioq.circuit", "helioq.simulator", "helioq.passes", "helioq.qasm"]
+    "module",
+    [
+        "helioq.circuit",
+        "helioq.simulator",
+        "helioq.passes",
+        "helioq.qasm",
+        "helioq.draw",
+        "helioq.stabilizer",
+        "helioq.qec",
+    ],
 )
 def test_layer_modules_import(module):
     importlib.import_module(module)

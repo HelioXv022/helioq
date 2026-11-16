@@ -20,6 +20,45 @@ goal is that every line can be explained.
 Status: layer 1 done. Layer 2 is next: `tests/test_simulator.py` is its
 specification.
 
+## Fault-tolerance track
+
+A second track that does not depend on layers 2–5:
+
+| Module | What it does |
+|---|---|
+| `helioq.draw` | Text and SVG circuit diagrams: `circ.draw()`, `circ.to_svg()` |
+| `helioq.stabilizer` | Tableau simulator for Clifford circuits, with measurement, reset and Pauli noise |
+| `helioq.qec` | Repetition, Steane and rotated surface codes; syndrome circuits; lookup decoder; logical error rates |
+
+```python
+from helioq import Circuit
+from helioq.stabilizer import run, stabilizers
+
+bell = Circuit(2).h(0).cx(0, 1)
+print(bell.draw())
+# q0: ─H──●─
+#         │
+# q1: ────⊕─
+stabilizers(bell)  # ['+XX', '+ZZ']
+run(bell.measure_all(), shots=4, seed=0)  # rows are 00 or 11, never 01 or 10
+```
+
+![GHZ circuit](docs/img/ghz.svg)
+
+```python
+from helioq.qec import memory_experiment, rotated_surface_code
+
+exp = memory_experiment(rotated_surface_code(3), p=0.03)
+exp.logical_error_rate(shots=2000, seed=0)  # about 0.005
+exp.logical_error_rate(shots=2000, seed=0, decode=False)  # about 0.06
+```
+
+`python examples/repetition_code_threshold.py` prints logical error rate
+against physical error rate for several code distances.
+
+Not there yet: noisy gates and measurements (circuit-level noise), detectors
+over many rounds, a matching decoder, logical gates.
+
 Design decisions are recorded in [`docs/design.md`](docs/design.md).
 
 ## Development

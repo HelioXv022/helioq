@@ -6,6 +6,13 @@ Layers (see ``docs/design.md`` for the decisions behind each one):
 2. ``helioq.simulator`` – state-vector simulation
 3. ``helioq.passes``    – optimization passes that rewrite circuits
 4. ``helioq.qasm``      – export to OpenQASM 2.0
+
+Fault-tolerance track (works without layers 2-4):
+
+- ``helioq.draw``       – text and SVG circuit diagrams
+- ``helioq.stabilizer`` – tableau simulation of Clifford circuits with
+  measurement, reset and Pauli noise
+- ``helioq.qec``        – codes, syndrome circuits, decoding, logical error rates
 """
 
 from helioq.circuit import GATE_SPECS, Circuit, Gate

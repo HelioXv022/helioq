@@ -17,6 +17,10 @@ Conventions you must follow (docs/design.md):
       [[cos(θ/2),           -e^{iλ} sin(θ/2)],
        [e^{iφ} sin(θ/2),  e^{i(φ+λ)} cos(θ/2)]]
 
+Scope: only the unitary gates in ``GATE_SPECS``. Circuits may also contain
+``measure``, ``reset`` and noise (``NON_UNITARY_SPECS``, design.md D7); for
+now ``simulate`` should raise ``ValueError`` when it meets one of those.
+
 Suggested order:
 1. ``gate_matrix``: start with x, h, cx; add the rest once Bell works.
 2. ``apply_gate``: do NOT build a 2**n x 2**n matrix. Reshape the state to

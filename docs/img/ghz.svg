@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 464 132" width="464" height="132" font-family="monospace" font-size="13">
+<rect width="464" height="132" fill="white"/>
+<text x="6" y="26.0" fill="#1f2937">q0</text><line x1="36" y1="22.0" x2="458" y2="22.0" stroke="#1f2937" stroke-width="1"/>
+<text x="6" y="70.0" fill="#1f2937">q1</text><line x1="36" y1="66.0" x2="458" y2="66.0" stroke="#1f2937" stroke-width="1"/>
+<text x="6" y="114.0" fill="#1f2937">q2</text><line x1="36" y1="110.0" x2="458" y2="110.0" stroke="#1f2937" stroke-width="1"/>
+<rect x="64.0" y="8.0" width="28" height="28" rx="4" fill="#dbeafe" stroke="#1f2937"/><text x="78.0" y="26.333333333333332" text-anchor="middle" font-size="13" fill="#1f2937">H</text>
+<line x1="146.0" y1="22.0" x2="146.0" y2="66.0" stroke="#1f2937" stroke-width="1.5"/>
+<circle cx="146.0" cy="22.0" r="4.5" fill="#1f2937"/>
+<circle cx="146.0" cy="66.0" r="9" fill="white" stroke="#1f2937" stroke-width="1.5"/><path d="M137.0 66.0H155.0M146.0 57.0V75.0" stroke="#1f2937" stroke-width="1.5"/>
+<line x1="214.0" y1="66.0" x2="214.0" y2="110.0" stroke="#1f2937" stroke-width="1.5"/>
+<circle cx="214.0" cy="66.0" r="4.5" fill="#1f2937"/>
+<circle cx="214.0" cy="110.0" r="9" fill="white" stroke="#1f2937" stroke-width="1.5"/><path d="M205.0 110.0H223.0M214.0 101.0V119.0" stroke="#1f2937" stroke-width="1.5"/>
+<rect x="187.0" y="8.0" width="54.0" height="28" rx="4" fill="#dbeafe" stroke="#1f2937"/><text x="214.0" y="25.0" text-anchor="middle" font-size="9" fill="#1f2937">RZ(0.25)</text>
+<line x1="282.0" y1="22.0" x2="282.0" y2="110.0" stroke="#1f2937" stroke-width="1.5"/>
+<path d="M276.0 16.0L288.0 28.0M276.0 28.0L288.0 16.0" stroke="#1f2937" stroke-width="1.8"/>
+<path d="M276.0 104.0L288.0 116.0M276.0 116.0L288.0 104.0" stroke="#1f2937" stroke-width="1.8"/>
+<line x1="350.0" y1="22.0" x2="350.0" y2="66.0" stroke="#1f2937" stroke-width="1.5"/>
+<circle cx="350.0" cy="22.0" r="4.5" fill="#1f2937"/>
+<circle cx="350.0" cy="66.0" r="4.5" fill="#1f2937"/>
+<rect x="336.0" y="96.0" width="28" height="28" rx="4" fill="#e5e7eb" stroke="#1f2937"/><text x="350.0" y="114.33333333333333" text-anchor="middle" font-size="13" fill="#1f2937">M</text>
+<rect x="404.0" y="8.0" width="28" height="28" rx="4" fill="#e5e7eb" stroke="#1f2937"/><text x="418.0" y="26.333333333333332" text-anchor="middle" font-size="13" fill="#1f2937">M</text>
+<rect x="404.0" y="52.0" width="28" height="28" rx="4" fill="#e5e7eb" stroke="#1f2937"/><text x="418.0" y="70.33333333333333" text-anchor="middle" font-size="13" fill="#1f2937">M</text>
+</svg>
